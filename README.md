@@ -18,7 +18,7 @@ from tqnn import TQNNClient
 
 client = TQNNClient(
     api_key="TQNN_xxxxxxxxxxxxxxxxx",
-    base_url="YOUR_API_URL"
+    base_url="[https://tqnn-anyengine-api-914075492772.northamerica-northeast1.run.app]"
 )
 
 result = client.run_any(
