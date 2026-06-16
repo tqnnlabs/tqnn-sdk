@@ -8,13 +8,45 @@ version = "0.1.0"
 description = "Python SDK for the TQNN AnyEngine API"
 readme = "README.md"
 license = {text = "MIT"}
+
 authors = [
-    {name = "TQNN Labs"}
+{name = "TQNN Labs"}
 ]
+
 dependencies = [
-    "requests>=2.31.0"
+"requests>=2.31.0"
 ]
+
 requires-python = ">=3.9"
+
+keywords = [
+"ai",
+"machine-learning",
+"inference",
+"sdk",
+"api",
+"eeg",
+"finance",
+"chemistry",
+"tqnn"
+]
+
+classifiers = [
+"Development Status :: 3 - Alpha",
+"Intended Audience :: Developers",
+"License :: OSI Approved :: MIT License",
+"Programming Language :: Python :: 3",
+"Programming Language :: Python :: 3.9",
+"Programming Language :: Python :: 3.10",
+"Programming Language :: Python :: 3.11",
+"Operating System :: OS Independent"
+]
+
+[project.urls] we
+Homepage = "TQNNlabs.com"
+Documentation = "https://tqnn-anyengine-api-914075492772.northamerica-northeast1.run.app/docs"
+Repository = "REPLACE_WITH_GITHUB_REPO_URL"
+Issues = "REPLACE_WITH_GITHUB_ISSUES_URL"
 
 [tool.setuptools]
 packages = ["tqnn"]
