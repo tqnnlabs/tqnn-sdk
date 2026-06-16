@@ -42,8 +42,8 @@ classifiers = [
 "Operating System :: OS Independent"
 ]
 
-[project.urls] we
-Homepage = "TQNNlabs.com"
+[project.urls]
+Homepage = "https://tqnnlabs.com"
 Documentation = "https://tqnn-anyengine-api-914075492772.northamerica-northeast1.run.app/docs"
 Repository = "https://github.com/tqnnlabs/tqnn-sdk"
 Issues = "https://github.com/tqnnlabs/tqnn-sdk/issues"
