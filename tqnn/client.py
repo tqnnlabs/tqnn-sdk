@@ -1,8 +1,11 @@
 import requests
 
 
+DEFAULT_BASE_URL = "https://tqnn-anyengine-api-914075492772.northamerica-northeast1.run.app"
+
+
 class TQNNClient:
-    def __init__(self, api_key, base_url):
+    def __init__(self, api_key, base_url=DEFAULT_BASE_URL):
         self.api_key = api_key
         self.base_url = base_url.rstrip("/")
 
