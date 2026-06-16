@@ -2,7 +2,7 @@ TQNN SDK
 
 Python SDK for the TQNN AnyEngine API.
 
-Access TQNN's cloud-hosted inference engine using a simple Python interface.
+Access TQNN's cloud-hosted inference engine through a simple Python interface.
 
 ---
 
@@ -18,7 +18,7 @@ from tqnn import TQNNClient
 
 client = TQNNClient(
     api_key="TQNN_xxxxxxxxxxxxxxxxx",
-    base_url="https://YOUR_API_URL"
+    base_url="YOUR_API_URL"
 )
 
 result = client.run_any(
@@ -45,11 +45,11 @@ IMAGE| Image feature analysis
 
 Authentication
 
-Every request requires a valid API key.
+Every request requires a valid TQNN API key.
 
 client = TQNNClient(
     api_key="TQNN_xxxxxxxxxxxxxxxxx",
-    base_url="https://YOUR_API_URL"
+    base_url="YOUR_API_URL"
 )
 
 API keys are issued after subscribing through TQNN Labs.
@@ -62,7 +62,7 @@ from tqnn import TQNNClient
 
 client = TQNNClient(
     api_key="TQNN_xxxxxxxxxxxxxxxxx",
-    base_url="https://YOUR_API_URL"
+    base_url="YOUR_API_URL"
 )
 
 result = client.run_any(
@@ -119,6 +119,27 @@ result = client.run_any(
 
 ---
 
+API Reference
+
+client.run_any(
+    data,
+    mode="ANY",
+    label=None,
+    metadata=None,
+    sfreq=None
+)
+
+Parameters
+
+Parameter| Description
+data| Input data for inference
+mode| ANY, EEG, FINANCE, CHEM, TEXT, TABULAR, IMAGE
+label| Optional sample label
+metadata| Optional metadata dictionary
+sfreq| Sampling frequency for EEG data
+
+---
+
 Example Response
 
 {
@@ -129,10 +150,28 @@ Example Response
 
 ---
 
+Status
+
+TQNN SDK Version: 0.1.0
+
+Public API: Active
+
+Supported Modes:
+
+- ANY
+- EEG
+- FINANCE
+- CHEM
+- TEXT
+- TABULAR
+- IMAGE
+
+---
+
 Requirements
 
 - Python 3.9+
-- requests
+- requests >= 2.31.0
 
 ---
 
