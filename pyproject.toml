@@ -45,8 +45,8 @@ classifiers = [
 [project.urls] we
 Homepage = "TQNNlabs.com"
 Documentation = "https://tqnn-anyengine-api-914075492772.northamerica-northeast1.run.app/docs"
-Repository = "REPLACE_WITH_GITHUB_REPO_URL"
-Issues = "REPLACE_WITH_GITHUB_ISSUES_URL"
+Repository = "https://github.com/tqnnlabs/tqnn-sdk"
+Issues = "https://github.com/tqnnlabs/tqnn-sdk/issues"
 
 [tool.setuptools]
 packages = ["tqnn"]
