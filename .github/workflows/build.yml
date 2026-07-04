@@ -1,9 +1,8 @@
 name: Build and Publish TQNN SDK
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 
 jobs:
   publish:
@@ -19,7 +18,7 @@ jobs:
       - name: Install build tools
         run: |
           python -m pip install --upgrade pip
-          pip install build twine
+          python -m pip install build twine
 
       - name: Build package
         run: python -m build
@@ -28,5 +27,4 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          twine upload dist/*
+        run: python -m twine upload dist/*
