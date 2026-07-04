@@ -1,24 +1,60 @@
-TQNN SDK
+# TQNN SDK
 
-Python SDK for the TQNN AnyEngine API.
+The official Python SDK for the **TQNN AnyEngine API**.
 
-Access TQNN's cloud-hosted inference engine through a simple Python interface.
+TQNN provides a unified interface for cloud-hosted inference across multiple data domains. Whether you're working with biosignals, financial markets, chemistry, text, images, or structured datasets, the SDK allows you to interact with the TQNN inference engine through one simple Python interface.
 
 ---
 
-Installation
+# Installation
 
+```bash
 pip install tqnn
+```
+
+Upgrade to the latest version:
+
+```bash
+pip install --upgrade tqnn
+```
 
 ---
 
-Quick Start
+# Why TQNN?
 
+Most machine learning frameworks are designed around solving a single problem.
+
+TQNN takes a different approach.
+
+Using a single client and a single API, developers can analyze multiple data domains through one consistent interface.
+
+Write your code once.
+
+Change only the input data.
+
+---
+
+# Supported Modes
+
+| Mode | Description |
+|------|-------------|
+| **ANY** | Automatic inference |
+| **EEG** | EEG & biosignal analysis |
+| **FINANCE** | Financial market analysis |
+| **CHEM** | Molecular & chemistry analysis |
+| **TEXT** | Natural language inference |
+| **TABULAR** | Structured data analysis |
+| **IMAGE** | Image feature analysis |
+
+---
+
+# Quick Start
+
+```python
 from tqnn import TQNNClient
 
 client = TQNNClient(
-    api_key="TQNN_xxxxxxxxxxxxxxxxx",
-    base_url="[https://tqnn-anyengine-api-914075492772.northamerica-northeast1.run.app]"
+    api_key="YOUR_API_KEY"
 )
 
 result = client.run_any(
@@ -27,65 +63,27 @@ result = client.run_any(
 )
 
 print(result)
+```
 
 ---
 
-Supported Modes
+# Examples
 
-Mode| Description
-ANY| Automatic inference
-EEG| EEG and biosignal analysis
-FINANCE| Financial data analysis
-CHEM| Molecular and chemistry analysis
-TEXT| Text inference
-TABULAR| Structured data analysis
-IMAGE| Image feature analysis
+## EEG
 
----
-
-Authentication
-
-Every request requires a valid TQNN API key.
-
-client = TQNNClient(
-    api_key="TQNN_xxxxxxxxxxxxxxxxx",
-    base_url="https://tqnn-anyengine-api-914075492772.northamerica-northeast1.run.app"
-)
-
-API keys are issued after subscribing through TQNN Labs.
-
----
-
-Basic Usage
-
-from tqnn import TQNNClient
-
-client = TQNNClient(
-    api_key="TQNN_xxxxxxxxxxxxxxxxx",
-    base_url="[https://tqnn-anyengine-api-914075492772.northamerica-northeast1.run.app]"
-)
-
-result = client.run_any(
-    data=[1, 2, 3, 4],
-    mode="ANY"
-)
-
-print(result)
-
----
-
-EEG Example
-
+```python
 result = client.run_any(
     data=eeg_samples,
     mode="EEG",
     sfreq=250
 )
+```
 
 ---
 
-Finance Example
+## Finance
 
+```python
 result = client.run_any(
     data={
         "rsi": 63.2,
@@ -94,33 +92,72 @@ result = client.run_any(
     },
     mode="FINANCE"
 )
+```
 
 ---
 
-Chemistry Example
+## Chemistry
 
+```python
 result = client.run_any(
     data="CCO",
     mode="CHEM"
 )
+```
 
 ---
 
-Optional Parameters
+## Text
 
+```python
+result = client.run_any(
+    data="Artificial intelligence is transforming science.",
+    mode="TEXT"
+)
+```
+
+---
+
+## Tabular
+
+```python
+result = client.run_any(
+    data=[18.2, 24.1, 0.82, 15.6],
+    mode="TABULAR"
+)
+```
+
+---
+
+## Image
+
+```python
+result = client.run_any(
+    data=image_array,
+    mode="IMAGE"
+)
+```
+
+---
+
+# Optional Parameters
+
+```python
 result = client.run_any(
     data=my_data,
     mode="ANY",
-    label="sample",
+    label="sample_001",
     metadata={
         "source": "demo"
     }
 )
+```
 
 ---
 
-API Reference
+# API Reference
 
+```python
 client.run_any(
     data,
     mode="ANY",
@@ -128,61 +165,75 @@ client.run_any(
     metadata=None,
     sfreq=None
 )
+```
 
-Parameters
-
-Parameter| Description
-data| Input data for inference
-mode| ANY, EEG, FINANCE, CHEM, TEXT, TABULAR, IMAGE
-label| Optional sample label
-metadata| Optional metadata dictionary
-sfreq| Sampling frequency for EEG data
+| Parameter | Description |
+|-----------|-------------|
+| **data** | Input data for inference |
+| **mode** | ANY, EEG, FINANCE, CHEM, TEXT, TABULAR or IMAGE |
+| **label** | Optional sample label |
+| **metadata** | Optional metadata dictionary |
+| **sfreq** | Sampling frequency for EEG data |
 
 ---
 
-Example Response
+# Example Response
 
+```json
 {
-  "prediction": "class_a",
-  "confidence": 0.94,
-  "mode": "ANY"
+    "prediction": "class_a",
+    "confidence": 0.94,
+    "mode": "ANY"
 }
+```
 
 ---
 
-Status
+# Authentication
 
-TQNN SDK Version: 0.1.0
+Every request requires a valid TQNN API key.
 
-Public API: Active
+```python
+from tqnn import TQNNClient
 
-Supported Modes:
+client = TQNNClient(
+    api_key="YOUR_API_KEY"
+)
+```
 
-- ANY
-- EEG
-- FINANCE
-- CHEM
-- TEXT
-- TABULAR
-- IMAGE
+API keys are issued after subscribing through **TQNN Labs**.
 
 ---
 
-Requirements
+# Documentation & Resources
+
+**Website**
+
+https://tqnnlabs.com
+
+The GitHub repository includes:
+
+- Complete SDK source code
+- Working examples
+- Release history
+- Documentation
+- Issue tracker
+
+---
+
+# Requirements
 
 - Python 3.9+
 - requests >= 2.31.0
 
 ---
 
-License
+# License
 
 MIT License
 
-Copyright (c) TQNN Labs
+Copyright (c) TQNN Labs.
 
----
+The **TQNN SDK** is open source under the MIT License.
 
-TQNN SDK provides access to the TQNN AnyEngine API.
-
-The underlying inference engine, backend infrastructure, and proprietary computational methods remain the intellectual property of TQNN Labs.
+The **TQNN AnyEngine runtime**, backend infrastructure, proprietary inference engine, and computational methods remain the intellectual property of **TQNN Labs**.
