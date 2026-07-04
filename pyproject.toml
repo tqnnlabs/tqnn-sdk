@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tqnn"
-version = "0.1.2"
+version = "0.1.3"
 description = "Python SDK for the TQNN AnyEngine API"
 readme = "README.md"
 license = {text = "MIT"}
