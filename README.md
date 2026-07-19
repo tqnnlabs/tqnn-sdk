@@ -1,8 +1,10 @@
-# TQNN SDK
+# TQNN Python SDK
 
-The official Python SDK for the **TQNN AnyEngine API**.
+## Official Python client for the TQNN API
 
-TQNN provides a unified interface for cloud-hosted inference across multiple data domains. Whether you're working with biosignals, financial markets, chemistry, text, images, or structured datasets, the SDK allows you to interact with the TQNN inference engine through one simple Python interface.
+The TQNN Python SDK provides a simple interface for interacting with the TQNN Fault-Tolerant Inference Platform.
+
+Build applications that perform confidence-aware inference across structured data using a consistent Python interface.
 
 ---
 
@@ -12,39 +14,12 @@ TQNN provides a unified interface for cloud-hosted inference across multiple dat
 pip install tqnn
 ```
 
-Upgrade to the latest version:
-
-```bash
-pip install --upgrade tqnn
-```
-
 ---
 
-# Why TQNN?
+# Requirements
 
-Most machine learning frameworks are designed around solving a single problem.
-
-TQNN takes a different approach.
-
-Using a single client and a single API, developers can analyze multiple data domains through one consistent interface.
-
-Write your code once.
-
-Change only the input data.
-
----
-
-# Supported Modes
-
-| Mode | Description |
-|------|-------------|
-| **ANY** | Automatic inference |
-| **EEG** | EEG & biosignal analysis |
-| **FINANCE** | Financial market analysis |
-| **CHEM** | Molecular & chemistry analysis |
-| **TEXT** | Natural language inference |
-| **TABULAR** | Structured data analysis |
-| **IMAGE** | Image feature analysis |
+- Python 3.9+
+- Active TQNN API key
 
 ---
 
@@ -54,144 +29,21 @@ Change only the input data.
 from tqnn import TQNNClient
 
 client = TQNNClient(
-    api_key="YOUR_API_KEY"
+    api_key="TQNN_xxxxxxxxxxxxxxxxx"
 )
 
-result = client.run_any(
-    data=[1, 2, 3, 4],
-    mode="ANY"
+response = client.run_any(
+    data=[1.2, 1.4, 1.6, 2.1],
+    mode="TABULAR",
+    task="fault_diagnosis"
 )
 
-print(result)
+print(response)
 ```
 
 ---
 
-# Examples
-
-## EEG
-
-```python
-result = client.run_any(
-    data=eeg_samples,
-    mode="EEG",
-    sfreq=250
-)
-```
-
----
-
-## Finance
-
-```python
-result = client.run_any(
-    data={
-        "rsi": 63.2,
-        "macd": 1.12,
-        "slope": 0.05
-    },
-    mode="FINANCE"
-)
-```
-
----
-
-## Chemistry
-
-```python
-result = client.run_any(
-    data="CCO",
-    mode="CHEM"
-)
-```
-
----
-
-## Text
-
-```python
-result = client.run_any(
-    data="Artificial intelligence is transforming science.",
-    mode="TEXT"
-)
-```
-
----
-
-## Tabular
-
-```python
-result = client.run_any(
-    data=[18.2, 24.1, 0.82, 15.6],
-    mode="TABULAR"
-)
-```
-
----
-
-## Image
-
-```python
-result = client.run_any(
-    data=image_array,
-    mode="IMAGE"
-)
-```
-
----
-
-# Optional Parameters
-
-```python
-result = client.run_any(
-    data=my_data,
-    mode="ANY",
-    label="sample_001",
-    metadata={
-        "source": "demo"
-    }
-)
-```
-
----
-
-# API Reference
-
-```python
-client.run_any(
-    data,
-    mode="ANY",
-    label=None,
-    metadata=None,
-    sfreq=None
-)
-```
-
-| Parameter | Description |
-|-----------|-------------|
-| **data** | Input data for inference |
-| **mode** | ANY, EEG, FINANCE, CHEM, TEXT, TABULAR or IMAGE |
-| **label** | Optional sample label |
-| **metadata** | Optional metadata dictionary |
-| **sfreq** | Sampling frequency for EEG data |
-
----
-
-# Example Response
-
-```json
-{
-    "prediction": "class_a",
-    "confidence": 0.94,
-    "mode": "ANY"
-}
-```
-
----
-
-# Authentication
-
-Every request requires a valid TQNN API key.
+# Creating a Client
 
 ```python
 from tqnn import TQNNClient
@@ -201,39 +53,159 @@ client = TQNNClient(
 )
 ```
 
-API keys are issued after subscribing through **TQNN Labs**.
+---
+
+# Running Inference
+
+```python
+response = client.run_any(
+    data=data,
+    mode="TABULAR",
+    task="fault_diagnosis",
+    label="pump_sensor_window",
+    metadata={
+        "class_labels": [
+            "healthy",
+            "fault"
+        ]
+    }
+)
+```
 
 ---
 
-# Documentation & Resources
+# Parameters
 
-**Website**
-
-https://tqnnlabs.com
-
-The GitHub repository includes:
-
-- Complete SDK source code
-- Working examples
-- Release history
-- Documentation
-- Issue tracker
+| Parameter | Description |
+|------------|-------------|
+| data | Structured input data |
+| mode | EEG, FINANCE, TABULAR, IMAGE or ANY |
+| task | Optional inference context |
+| label | Optional request label |
+| metadata | Additional request metadata |
 
 ---
 
-# Requirements
+# Example Response
 
-- Python 3.9+
-- requests >= 2.31.0
+```python
+{
+    "platform": "TQNN",
+    "engine": "fault_tolerant_inference",
+
+    "result": {
+        "prediction_index": 1,
+        "prediction_label": "fault",
+        "confidence": 0.94,
+        "decision": "accept"
+    },
+
+    "tqnn_report": {
+        "primary_capability": "Fault Diagnosis",
+
+        "confidence": {
+            "score": 0.94,
+            "label": "high"
+        },
+
+        "data_integrity": {
+            "score": 0.98,
+            "label": "nominal"
+        }
+    },
+
+    "diagnostics": {}
+}
+```
+
+---
+
+# Convenience Methods
+
+The SDK includes helper methods for accessing commonly used sections of a response.
+
+### Prediction
+
+```python
+result = client.result(response)
+```
+
+### TQNN Report
+
+```python
+report = client.report(response)
+```
+
+### Diagnostics
+
+```python
+diagnostics = client.diagnostics(response)
+```
+
+---
+
+# Supported Modes
+
+| Mode | Description |
+|------|-------------|
+| EEG | Biosignal inference |
+| FINANCE | Financial time-series inference |
+| TABULAR | Structured datasets |
+| IMAGE | Structured image feature inference |
+| ANY | Generic structured inference |
+
+---
+
+# Common Applications
+
+The same SDK can be used for a wide range of structured inference problems, including:
+
+- Fault Diagnosis
+- Fault Detection
+- Sensor Monitoring
+- Industrial Process Monitoring
+- Biosignal Analysis
+- Financial Time-Series
+- Scientific Computing
+- General Structured Data
+
+---
+
+# Error Handling
+
+```python
+try:
+    response = client.run_any(
+        data=data,
+        mode="TABULAR"
+    )
+
+except Exception as e:
+    print(e)
+```
+
+---
+
+# Philosophy
+
+The SDK is intentionally lightweight.
+
+Its purpose is to provide a clean Python interface to the TQNN API while exposing the full standardized response returned by the platform.
+
+Rather than hiding inference details, the SDK gives developers direct access to prediction results, confidence information, data integrity metrics, and diagnostics.
 
 ---
 
 # License
 
-MIT License
+The TQNN Python SDK is released under the MIT License.
 
-Copyright (c) TQNN Labs.
+The SDK is open source and intended to simplify integration with the hosted TQNN API.
 
-The **TQNN SDK** is open source under the MIT License.
+The underlying TQNN inference runtime and proprietary implementation remain the intellectual property of TQNN Labs.
 
-The **TQNN AnyEngine runtime**, backend infrastructure, proprietary inference engine, and computational methods remain the intellectual property of **TQNN Labs**.
+---
+
+**TQNN Labs**
+
+Official Python SDK for the TQNN Fault-Tolerant Inference Platform.
