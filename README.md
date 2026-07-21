@@ -1,10 +1,23 @@
 # TQNN Python SDK
 
-## Official Python client for the TQNN API
+Official Python SDK for the **TQNN Fault-Tolerant Inference Platform**.
 
-The TQNN Python SDK provides a simple interface for interacting with the TQNN Fault-Tolerant Inference Platform.
+The TQNN Python SDK provides a clean, lightweight interface for interacting with the managed TQNN cloud runtime.
 
-Build applications that perform confidence-aware inference across structured data using a consistent Python interface.
+Build Python applications that perform confidence-aware inference on noisy, incomplete, or uncertain data through a simple and consistent API.
+
+---
+
+# Features
+
+- Official Python client for the TQNN Platform
+- Confidence-aware inference
+- Input-integrity reporting
+- Controlled decision states
+- Runtime diagnostics
+- Domain-agnostic inference
+- Managed cloud execution
+- Simple Python interface
 
 ---
 
@@ -53,6 +66,10 @@ client = TQNNClient(
 )
 ```
 
+The SDK automatically communicates with the managed TQNN cloud runtime.
+
+No custom endpoint configuration is required for standard deployments.
+
 ---
 
 # Running Inference
@@ -78,43 +95,70 @@ response = client.run_any(
 
 | Parameter | Description |
 |------------|-------------|
-| data | Structured input data |
+| data | Structured numerical input |
 | mode | EEG, FINANCE, TABULAR, IMAGE or ANY |
 | task | Optional inference context |
 | label | Optional request label |
-| metadata | Additional request metadata |
+| sfreq | Optional sampling frequency |
+| metadata | Additional application metadata |
 
 ---
 
 # Example Response
 
-```python
+```json
 {
     "platform": "TQNN",
-    "engine": "fault_tolerant_inference",
+    "engine": "TQNN Fault-Tolerant Inference Engine",
+    "engine_version": "2.0.0",
+
+    "mode": "TABULAR",
 
     "result": {
         "prediction_index": 1,
         "prediction_label": "fault",
         "confidence": 0.94,
-        "decision": "accept"
+        "decision": "ACCEPT"
     },
 
     "tqnn_report": {
-        "primary_capability": "Fault Diagnosis",
+
+        "primary_capability": "fault-tolerant inference",
 
         "confidence": {
             "score": 0.94,
-            "label": "high"
+            "label": "high",
+            "margin": 0.28,
+            "entropy": 0.17
         },
 
         "data_integrity": {
             "score": 0.98,
-            "label": "nominal"
-        }
+            "label": "valid",
+            "feature_count": 4,
+            "finite_fraction": 1.0,
+            "missing_fraction": 0.0,
+            "constant_input": false
+        },
+
+        "decision": {
+            "status": "ACCEPT",
+            "threshold_met": true
+        },
+
+        "warnings": []
     },
 
-    "diagnostics": {}
+    "diagnostics": {
+        "probabilities": [0.06, 0.94],
+        "confidence_margin": 0.28,
+        "normalized_entropy": 0.17,
+        "acceptance_threshold": 0.61,
+        "threshold_met": true,
+        "qualia": {},
+        "intent": [],
+        "meta": {}
+    }
 }
 ```
 
@@ -122,21 +166,21 @@ response = client.run_any(
 
 # Convenience Methods
 
-The SDK includes helper methods for accessing commonly used sections of a response.
+The SDK provides helper methods for quickly accessing common sections of a response.
 
-### Prediction
+## Prediction
 
 ```python
 result = client.result(response)
 ```
 
-### TQNN Report
+## TQNN Report
 
 ```python
 report = client.report(response)
 ```
 
-### Diagnostics
+## Diagnostics
 
 ```python
 diagnostics = client.diagnostics(response)
@@ -144,26 +188,41 @@ diagnostics = client.diagnostics(response)
 
 ---
 
+# Controlled Decisions
+
+Every inference returns a standardized decision state.
+
+Possible values include:
+
+- ACCEPT
+- REVIEW
+- REJECT
+
+Applications should use these decision states to determine whether an inference should be accepted automatically or reviewed before action.
+
+---
+
 # Supported Modes
 
 | Mode | Description |
 |------|-------------|
-| EEG | Biosignal inference |
-| FINANCE | Financial time-series inference |
+| ANY | Domain-agnostic inference |
 | TABULAR | Structured datasets |
-| IMAGE | Structured image feature inference |
-| ANY | Generic structured inference |
+| EEG | Biosignal inference |
+| FINANCE | Financial time-series |
+| IMAGE | Structured image features |
 
 ---
 
-# Common Applications
+# Example Applications
 
-The same SDK can be used for a wide range of structured inference problems, including:
+The SDK can be integrated into applications including:
 
-- Fault Diagnosis
 - Fault Detection
+- Fault Diagnosis
 - Sensor Monitoring
 - Industrial Process Monitoring
+- Predictive Maintenance
 - Biosignal Analysis
 - Financial Time-Series
 - Scientific Computing
@@ -175,6 +234,7 @@ The same SDK can be used for a wide range of structured inference problems, incl
 
 ```python
 try:
+
     response = client.run_any(
         data=data,
         mode="TABULAR"
@@ -186,13 +246,52 @@ except Exception as e:
 
 ---
 
+# Best Practices
+
+Store API keys using environment variables.
+
+```bash
+export TQNN_API_KEY="TQNN_xxxxxxxxxxxxxxxxx"
+```
+
+```python
+import os
+
+from tqnn import TQNNClient
+
+client = TQNNClient(
+    api_key=os.environ["TQNN_API_KEY"]
+)
+```
+
+Never commit API keys to public repositories.
+
+---
+
+# Version Compatibility
+
+This SDK is designed for the **TQNN Fault-Tolerant Inference API v2**.
+
+Future SDK releases will remain aligned with the public API contract.
+
+---
+
 # Philosophy
 
 The SDK is intentionally lightweight.
 
-Its purpose is to provide a clean Python interface to the TQNN API while exposing the full standardized response returned by the platform.
+Rather than hiding inference details, it exposes the complete standardized response returned by the platform.
 
-Rather than hiding inference details, the SDK gives developers direct access to prediction results, confidence information, data integrity metrics, and diagnostics.
+Applications receive:
+
+- Prediction results
+- Confidence scores
+- Decision status
+- Input-integrity reporting
+- Runtime diagnostics
+- Structured metadata
+
+The SDK acts as a thin Python layer over the managed TQNN cloud runtime.
 
 ---
 
@@ -200,12 +299,41 @@ Rather than hiding inference details, the SDK gives developers direct access to 
 
 The TQNN Python SDK is released under the MIT License.
 
-The SDK is open source and intended to simplify integration with the hosted TQNN API.
+The following components are open source:
 
-The underlying TQNN inference runtime and proprietary implementation remain the intellectual property of TQNN Labs.
+- Python SDK
+- Client utilities
+- Integration helpers
+- Example code
+
+The managed inference runtime, execution substrate, orchestration services, and production infrastructure remain proprietary intellectual property of TQNN Labs.
 
 ---
 
-**TQNN Labs**
+# About TQNN Labs
 
-Official Python SDK for the TQNN Fault-Tolerant Inference Platform.
+TQNN Labs develops cloud-hosted fault-tolerant inference infrastructure for applications operating on noisy, incomplete, or unreliable data.
+
+The platform combines:
+
+- Hybrid quantum-classical execution
+- Confidence-aware inference
+- Input-integrity reporting
+- Controlled decision logic
+- Managed cloud deployment
+
+Website:
+
+https://tqnnlabs.com
+
+Built in Canada 🇨🇦
+
+---
+
+# Vision
+
+TQNN Labs is building infrastructure that helps applications understand not only **what** was predicted, but **how much confidence** should be placed in the prediction.
+
+Reliable inference should continue working even when real-world data does not.
+
+**Build once. Infer through uncertainty.**
